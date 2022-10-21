@@ -76,23 +76,23 @@ public class AutomateDataObjects {
 
 
     private void createJavaClass() throws IOException {
-        javaFile = new FileWriter(className+".java");
+        javaFile = new FileWriter(System.getProperty("user.dir")+prop.getProperty("output_location")+className+".java");
 
-        javaFile.write("\n\nimport com.iexceed.uiframework.core.TestBase;\n" +
+        javaFile.write("\n\nimport BrowserInitiation.TestBase;\n" +
                 "import org.openqa.selenium.WebDriver;\n" +
                 "import org.openqa.selenium.WebElement;\n" +
                 "import org.openqa.selenium.support.FindBy;\n" +
                 "import org.openqa.selenium.support.PageFactory;\n" +
                 "import java.util.List;\n"+
-                "import com.iexceed.uiframework.DomainObjects.Utility;");
+                "import CommonUtilities.QuickUtility;");
 
         javaFile.write("\n\n\npublic class "+className+"{\n\n");
         javaFile.write("\tWebDriver driver = TestBase.getDriver();\n\n");
 
         writePageObjects();
 
-        javaFile.write("\n\tprivate final Utility utilities;");
-        javaFile.write("\n\n\tpublic "+className+"(){\n\t\tPageFactory.initElements(driver,this);\n\t\tutilities = new Utility();\n\t}\n\n");
+        javaFile.write("\n\tprivate final QuickUtility utilities;");
+        javaFile.write("\n\n\tpublic "+className+"(){\n\t\tPageFactory.initElements(driver,this);\n\t\tutilities = new QuickUtility();\n\t}\n\n");
 
         writeImplementations();
 
@@ -105,13 +105,17 @@ public class AutomateDataObjects {
 
 
     private static void writePageObjects() throws IOException {
-        for (List<String> result: resultList) {
-            if (result.get(1).equalsIgnoreCase("list")){
-                javaFile.write("\t@FindBy(xpath = \"" + result.get(2) + "\")\n\tWebElement "+result.get(0)+";\n");
-                javaFile.write("\t@FindBy(xpath = \"" + result.get(3) + "\")\n\tList<WebElement> "+result.get(0)+"List;\n");
-            }else {
-                javaFile.write("\t@FindBy(xpath = \"" + result.get(2) + "\")\n\tWebElement "+result.get(0)+";\n");
+        try {
+            for (List<String> result : resultList) {
+                if (result.get(1).equalsIgnoreCase("list")) {
+                    javaFile.write("\t@FindBy(xpath = \"" + result.get(2) + "\")\n\tWebElement " + result.get(0) + ";\n");
+                    javaFile.write("\t@FindBy(xpath = \"" + result.get(3) + "\")\n\tList<WebElement> " + result.get(0) + "List;\n");
+                } else {
+                    javaFile.write("\t@FindBy(xpath = \"" + result.get(2) + "\")\n\tWebElement " + result.get(0) + ";\n");
+                }
             }
+        }catch (Exception e){
+            System.out.println("Not able to Create Java file \n Please make sure Excel Data provided Correct \n ex List - 2 additional xpath should provide");
         }
     }
 
@@ -123,7 +127,7 @@ public class AutomateDataObjects {
                 case "text" : javaFile.write("\tpublic void set"+methodName+"(String value) throws Exception {\n\t\tutilities.sendKeys("+elementName+",value);\n\t}\n\n"); break;
                 case "button" : javaFile.write("\tpublic void click"+methodName+"() throws Exception {\n\t\tutilities.click("+elementName+");\n\t}\n\n"); break;
                 case "list" : javaFile.write("\tpublic void select"+methodName+"(String value) throws Exception {\n\t\tutilities.listSelection("+elementName+","+elementName+"List,value);\n\t}\n\n"); break;
-                case "select" : javaFile.write("\tpublic void select"+methodName+"(String value) throws Exception {\n\t\tutilities.selectTagSelection("+elementName+","+elementName+"List,value);\n\t}\n\n"); break;
+                case "select" : javaFile.write("\tpublic void select"+methodName+"(String value) throws Exception {\n\t\tutilities.selectTagSelection("+elementName+",value);\n\t}\n\n"); break;
                 case "assert" : javaFile.write("\tpublic void assert"+methodName+"(String value) throws Exception {\n\t\tutilities.assertValidation("+elementName+",value);\n\t}\n\n"); break;
                 default: javaFile.write("");
             }

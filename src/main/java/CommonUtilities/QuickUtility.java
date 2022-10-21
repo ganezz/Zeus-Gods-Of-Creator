@@ -108,7 +108,7 @@ public class QuickUtility extends TestBase {
        return flag;
     }
 
-    public void assertMessage(WebElement element, String message) {
+    public void assertValidation(WebElement element, String message) {
         waitForElement(element);
         Assert.assertEquals(element.getText().trim(),message);
     }
