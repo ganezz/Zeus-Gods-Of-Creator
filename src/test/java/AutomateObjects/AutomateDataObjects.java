@@ -47,28 +47,32 @@ public class AutomateDataObjects {
     }
 
     public void getAllElementDetails(String file, String testSheet) throws IOException {
-        FileInputStream fs = new FileInputStream(file);
-        XSSFWorkbook ex = new XSSFWorkbook(fs);
-        XSSFSheet xs;
-        int noSheet = ex.getNumberOfSheets(), i;
-        for (i=0;i<noSheet;i++){
-            if(ex.getSheetName(i).equalsIgnoreCase(testSheet)){
-                break;
+        try {
+            FileInputStream fs = new FileInputStream(file);
+            XSSFWorkbook ex = new XSSFWorkbook(fs);
+            XSSFSheet xs;
+            int noSheet = ex.getNumberOfSheets(), i;
+            for (i = 0; i < noSheet; i++) {
+                if (ex.getSheetName(i).equalsIgnoreCase(testSheet)) {
+                    break;
+                }
             }
-        }
-        xs = ex.getSheetAt(i);
-        Iterator<Row> rows = xs.iterator();
-        rows.next();
-        while (rows.hasNext()) {
-            List<String> result = new ArrayList<>();
-            Iterator<Cell> reqCells =  rows.next().iterator();
-            result.add(0,reqCells.next().getStringCellValue());
-            result.add(1,reqCells.next().getStringCellValue());
-            result.add(2,reqCells.next().getStringCellValue());
-            if (reqCells.hasNext()){
-                result.add(3,reqCells.next().getStringCellValue());
+            xs = ex.getSheetAt(i);
+            Iterator<Row> rows = xs.iterator();
+            rows.next();
+            while (rows.hasNext()) {
+                List<String> result = new ArrayList<>();
+                Iterator<Cell> reqCells = rows.next().iterator();
+                result.add(0, reqCells.next().getStringCellValue());
+                result.add(1, reqCells.next().getStringCellValue());
+                result.add(2, reqCells.next().getStringCellValue());
+                if (reqCells.hasNext()) {
+                    result.add(3, reqCells.next().getStringCellValue());
+                }
+                resultList.add(result);
             }
-            resultList.add(result);
+        }catch (Exception e){
+            System.out.println("Error while reading excel. Please check excel details..!");
         }
        // System.out.println(resultList.get(0));
     }
