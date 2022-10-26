@@ -14,7 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
-public class AutomateDataObjects {
+public class AutomatePageObjects {
 
     public static Properties prop = new Properties();
     public static String sheetLocation, sheetName;
@@ -22,7 +22,7 @@ public class AutomateDataObjects {
     public static FileWriter javaFile;
     public static String className;
 
-    public AutomateDataObjects(){
+    public AutomatePageObjects(){
         try {
             FileInputStream ip = new FileInputStream(new File("src/main/resources/automatedDataObject.properties"));
             prop.load(ip);
@@ -35,9 +35,9 @@ public class AutomateDataObjects {
     }
 
     public static void main(String[] args) throws IOException {
-        AutomateDataObjects automateDataObjects = new AutomateDataObjects();
+        AutomatePageObjects automatePageObjects = new AutomatePageObjects();
         System.out.println("Initiated Writing File : "+className);
-        automateDataObjects.createPageObjects();
+        automatePageObjects.createPageObjects();
        System.out.println("Created Java File : "+className);
     }
 
