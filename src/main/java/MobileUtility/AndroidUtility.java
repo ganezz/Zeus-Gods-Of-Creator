@@ -6,6 +6,7 @@ import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.touch.offset.PointOption;
 import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebElement;
@@ -16,6 +17,7 @@ import org.testng.Assert;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.DigestException;
 import java.util.List;
 
 import static MobileUtility.PcloudyConnection.appiumDriver;
@@ -155,6 +157,15 @@ public class AndroidUtility {
             waitForSeconds(1);
             i--;
         }
+    }
+
+
+    public void scrollWithOffset(){
+        Dimension dim = driver.manage().window().getSize();
+        int startx = dim.width/2;
+        int starty = (int) (dim.height * 0.2);
+        int endy = (int) (dim.height * 0.8);
+        touch.press(PointOption.point(startx,starty)).moveTo((PointOption.point(startx, endy))).perform();
     }
 
 }
